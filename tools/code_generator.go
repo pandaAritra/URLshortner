@@ -10,7 +10,7 @@ import (
 // ---------------
 const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 
-func generateCode() string {
+func GenerateCode() string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	var sb strings.Builder

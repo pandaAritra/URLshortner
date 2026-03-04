@@ -10,14 +10,14 @@ type Store interface {
 }
 type UriStore struct {
 	mu   sync.RWMutex
-	Urls map[string]string
+	urls map[string]string
 }
 
 // New data base instance
 // -----------------------
 func NewUriStore() *UriStore {
 	return &UriStore{
-		Urls: make(map[string]string),
+		urls: make(map[string]string),
 	}
 }
 
@@ -25,12 +25,12 @@ func NewUriStore() *UriStore {
 // --------------------------
 func (store *UriStore) Save(code, uri string) {
 	store.mu.Lock()
-	store.Urls[code] = uri
+	store.urls[code] = uri
 	store.mu.Unlock()
 }
 func (store *UriStore) Fetch(code string) (string, bool) {
 	store.mu.RLock()
-	uri, ok := store.Urls[code]
+	uri, ok := store.urls[code]
 	store.mu.RUnlock()
 	return uri, ok
 
