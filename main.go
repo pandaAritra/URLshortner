@@ -3,55 +3,48 @@ package main
 import (
 	"log"
 	"net/http"
-	"sync"
 	"time"
+
+	"github.com/pandaAritra/URLshortner/db"
 )
 
-// data base
+// handler struct
 // --------------
-type Store interface {
-	Save(code, uri string)
-	Get(code string) (string, bool)
-}
-type Uristore struct {
-	mu  sync.RWMutex
-	Box map[string]string
+type Handlers struct {
+	store db.Store
 }
 
-// Save and Get
-// -------------
-func (store *Uristore) Save(code, uri string) {
-	store.mu.Lock()
-	store.Box[code] = uri
-	store.mu.Unlock()
+type ShortenRequest struct {
+	URL string `json:"url"`
 }
-func (store *Uristore) Get(code string) (string, bool) {
-	store.mu.Lock()
-	uri, ok := store.Box[code]
-	store.mu.Unlock()
-	if ok {
-		return uri, ok
-	}
 
-	return "", ok
+type ShortenResponse struct {
+	Code     string `json:"code"`
+	ShortURL string `json:"short_url"`
+}
 
+type ErrorResponse struct {
+	Error string `json:"error"`
 }
 
 // request handlers
 // ------------------
-func shortner(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) shortner(w http.ResponseWriter, r *http.Request) {
 
 }
-func getUrl(w http.ResponseWriter, r *http.Request) {
+func (h *Handlers) fetchUrl(w http.ResponseWriter, r *http.Request) {
 
 }
 
 func main() {
+	store := db.NewUriStore()
+	h := &Handlers{store: store}
+
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("POST /shortner", shortner)
+	mux.HandleFunc("POST /shortner", h.shortner)
 
-	mux.HandleFunc("GET /{code}", getUrl)
+	mux.HandleFunc("fetch /{code}", h.fetchUrl)
 
 	//server config
 
