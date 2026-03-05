@@ -3,14 +3,31 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/pandaAritra/URLshortner/db"
 	"github.com/pandaAritra/URLshortner/handlers"
 )
 
 func main() {
-	store := db.NewUriStore()
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("error loading .env file")
+	}
+
+	connString := os.Getenv("POSTGRESSURL")
+	if connString == "" {
+		log.Fatal("DATABASE_URL is not set in .env")
+	}
+
+	store, err := db.NewPostgresStore(connString)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer store.Close()
+
 	h := &handlers.Handlers{Store: store}
 
 	mux := http.NewServeMux()
