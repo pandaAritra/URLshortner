@@ -77,12 +77,6 @@ GET {{baseURL}}/RGFTXQ
 GET {{baseURL}}/LfXZVb
 
 
-###############################################
-# 4.3 Redirect — replace YOUR_CODE with code
-#    from response of request 1
-###############################################
-
-GET {{baseURL}}/yXscKI
 
 ###############################################
 # 5. Redirect — code that doesnt exist
