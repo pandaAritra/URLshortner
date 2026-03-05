@@ -28,8 +28,8 @@ type ErrorResponse struct {
 	Error string `json:"error"`
 }
 
-// request handlers
-// ------------------
+// request handler shortner
+// ------------------------
 func (h *Handlers) Shortner(w http.ResponseWriter, r *http.Request) {
 	var req BigRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -41,14 +41,23 @@ func (h *Handlers) Shortner(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	code := tools.GenerateCode()
-	h.Store.Save(code, req.URL)
+	code, ok := h.Store.FindByURL(req.URL)
+	if !ok {
+		code = tools.GenerateCode()
+		for h.Store.Exists(code) {
+			code = tools.GenerateCode()
+		}
+		h.Store.Save(code, req.URL)
+	}
 
 	tools.WriteJSON(w, http.StatusCreated, ShortenResponse{
 		Code:     code,
 		ShortURL: fmt.Sprintf("http://localhost:8080/%s", code),
 	})
 }
+
+// request handler fetch
+// ---------------------
 func (h *Handlers) FetchUrl(w http.ResponseWriter, r *http.Request) {
 	code := r.PathValue("code")
 	if code == "" {
