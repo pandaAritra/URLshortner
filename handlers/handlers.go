@@ -1,4 +1,4 @@
-package routs
+package handlers
 
 import (
 	"encoding/json"

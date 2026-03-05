@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/pandaAritra/URLshortner/db"
-	"github.com/pandaAritra/URLshortner/routs"
+	"github.com/pandaAritra/URLshortner/handlers"
 )
 
 func main() {
 	store := db.NewUriStore()
-	h := &routs.Handlers{Store: store}
+	h := &handlers.Handlers{Store: store}
 
 	mux := http.NewServeMux()
 

@@ -4,13 +4,13 @@ package db
 // --------------------------
 func (store *UriStore) Save(code, uri string) {
 	store.mu.Lock()
+	defer store.mu.RUnlock()
 	store.urls[code] = uri
-	store.mu.Unlock()
 }
 func (store *UriStore) Fetch(code string) (string, bool) {
 	store.mu.RLock()
+	defer store.mu.RUnlock()
 	uri, ok := store.urls[code]
-	store.mu.RUnlock()
 	return uri, ok
 
 }
@@ -30,9 +30,9 @@ func (store *UriStore) FindByURL(url string) (string, bool) {
 
 // checks if Code Exists
 // ---------------------
-func (s *UriStore) Exists(code string) bool {
-	s.mu.RLock()
-	defer s.mu.RUnlock()
-	_, ok := s.urls[code]
+func (store *UriStore) Exists(code string) bool {
+	store.mu.RLock()
+	defer store.mu.RUnlock()
+	_, ok := store.urls[code]
 	return ok
 }
