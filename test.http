@@ -1,0 +1,46 @@
+@baseURL = http://localhost:8080
+
+###############################################
+# 1. Shorten a URL — happy path
+###############################################
+
+POST {{baseURL}}/shortner
+Content-Type: application/json
+
+{
+    "url": "https://google.com"
+}
+
+###############################################
+# 2. Shorten — empty url
+###############################################
+
+POST {{baseURL}}/shortner
+Content-Type: application/json
+
+{
+    "url": ""
+}
+
+###############################################
+# 3. Shorten — malformed JSON
+###############################################
+
+POST {{baseURL}}/shortner
+Content-Type: application/json
+
+{ not valid json }
+
+###############################################
+# 4. Redirect — replace YOUR_CODE with code
+#    from response of request 1
+###############################################
+
+GET {{baseURL}}/YOUR_CODE
+
+###############################################
+# 5. Redirect — code that doesnt exist
+###############################################
+
+GET {{baseURL}}/thisdoesnotexist
+
