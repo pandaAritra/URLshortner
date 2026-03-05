@@ -34,9 +34,11 @@ func (h *Handlers) Shortner(w http.ResponseWriter, r *http.Request) {
 	var req BigRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		tools.WriteJSON(w, http.StatusBadRequest, ErrorResponse{Error: "invalid JSON body"})
+		return
 	}
 	if req.URL == "" {
 		tools.WriteJSON(w, http.StatusBadRequest, ErrorResponse{Error: "Must contain URL"})
+		return
 	}
 
 	code := tools.GenerateCode()

@@ -36,7 +36,7 @@ Content-Type: application/json
 #    from response of request 1
 ###############################################
 
-GET {{baseURL}}/YOUR_CODE
+GET {{baseURL}}/
 
 ###############################################
 # 5. Redirect — code that doesnt exist
